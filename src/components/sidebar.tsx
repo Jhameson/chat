@@ -1,19 +1,26 @@
-import { useState } from "react";
 import SquarePen from "../assets/square-pen.svg";
+import Trash from "../assets/trash.svg";
 
-export const Sidebar = () => {
-  const [chats, setChats] = useState<string[]>([
-    "Exemplo de chat",
-    "Entrevista React",
-    "Treino técnico",
-    "Treino técnico",
-  ]);
+interface Chat {
+  id: string;
+  name: string;
+}
 
-  const addChat = () => {
-    const newChat = `Novo Chat ${chats.length + 1}`;
-    setChats([newChat, ...chats]);
-  };
+interface SidebarProps {
+  chats: Chat[] | [];
+  activeChatId: string;
+  onAddChat: () => void;
+  onSelectChat: (id: string) => void;
+  onDeleteChat?: (id: string) => void;
+}
 
+export const Sidebar = ({
+  chats,
+  activeChatId,
+  onAddChat,
+  onSelectChat,
+  onDeleteChat,
+}: SidebarProps) => {
   return (
     <div className="bg-[#282A2C] text-white h-screen w-[350px] flex flex-col">
       <div className="p-4 border-b border-gray-700">
@@ -23,7 +30,7 @@ export const Sidebar = () => {
         <div className="flex items-center justify-between mb-3">
           <span className="font-semibold">Chats</span>
           <button
-            onClick={addChat}
+            onClick={onAddChat}
             className="rounded-full bg-amber-600 w-9 h-9 flex items-center justify-center text-white hover:bg-amber-700 transition"
           >
             <img
@@ -35,15 +42,31 @@ export const Sidebar = () => {
         </div>
 
         <div className="space-y-2">
-          {chats.map((chat, index) => (
-            <div
-              key={index}
-              className="border border-gray-600 cursor-pointer rounded-md p-2 hover:bg-gray-700 transition"
-              onClick={() => {}}
-            >
-              <span>{chat}</span>
-            </div>
-          ))}
+          {chats &&
+            chats.map((chat) => (
+              <div
+                key={chat.id}
+                className={`border-gray-600 hover:bg-gray-700 flex justify-between items-center rounded-md p-2 border transition ${
+                  chat.id === activeChatId ? "bg-gray-700" : ""
+                }`}
+              >
+                <div
+                  className={`cursor-pointer flex-1 ${
+                    chat.id === activeChatId ? "bg-gray-700" : ""
+                  }`}
+                  onClick={() => onSelectChat(chat.id)}
+                >
+                  <span>{chat.name}</span>
+                </div>
+                <button onClick={() => onDeleteChat && onDeleteChat(chat.id)}>
+                  <img
+                    src={Trash}
+                    alt="Adicionar chat"
+                    className="w-4 h-4 color-white"
+                  />
+                </button>
+              </div>
+            ))}
         </div>
       </div>
 

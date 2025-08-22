@@ -1,30 +1,38 @@
 import { useState } from "react";
 import Chevron from "../assets/chevron.svg";
 
-interface IMessage {
-  role: "USER" | "GPT_QUE_SO_DIZ_A_HORA";
+export interface IMessage {
+  role: "USER" | "GPT_QUE_SO_DIZ_A_HORA" | "user";
   text: string;
 }
 
-export const ChatContainer = () => {
+interface ChatContainerProps {
+  messages: IMessage[];
+  setMessages: (msgs: IMessage[]) => void;
+}
+
+export const ChatContainer = ({
+  messages,
+  setMessages,
+}: ChatContainerProps) => {
   const [question, setQuestion] = useState<string>("");
-  const [messages, setMessages] = useState<IMessage[]>([]);
 
   const handleSend = () => {
     if (!question.trim()) return;
 
-    const newMessages = [...messages, { role: "user", text: question }];
+    const newMessages: IMessage[] = [
+      ...messages,
+      { role: "user", text: question },
+    ];
     setMessages(newMessages);
 
     setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "GPT_QUE_SO_DIZ_A_HORA",
-          text: `Resposta para: "${question}" \n São exatamente: ${new Date()}`,
-        },
-      ]);
-    }, 500);
+      const botMessage: IMessage = {
+        role: "GPT_QUE_SO_DIZ_A_HORA",
+        text: `Oi! Sobre sua pergunta: "${question}", aqui está uma resposta. Se quiser saber mais, só perguntar! \n (${new Date().toLocaleTimeString()})`,
+      };
+      setMessages([...newMessages, botMessage]);
+    }, 700);
 
     setQuestion("");
   };
@@ -32,17 +40,13 @@ export const ChatContainer = () => {
   return (
     <div className="bg-[#1B1C1D] w-full relative flex flex-col items-center px-2 py-6 overflow-hidden">
       <button
-        className="bg-[#232425] p-1 rounded-3xl absolute left-3 top-2 text-gray-100 flex items-center gap-2 hover:bg-gray-700"
+        className="bg-[#232425] px-2 py-1 rounded-3xl absolute left-3 top-2 text-gray-100 flex items-center gap-2 hover:bg-gray-700"
         onClick={() => {
           alert("Me contrate e tenha acesso a outras versões");
         }}
       >
         Jhameson GPT26
-        <img
-          src={Chevron}
-          alt="Adicionar chat"
-          className="w-5 h-5 color-white"
-        />
+        <img src={Chevron} alt="Abrir menu" className="w-5 h-5 color-white" />
         {/* </span> */}
       </button>
 
