@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+button {
+  cursor: pointer;
+}
+
+/* MY utilities*/
+@layer utilities {
+  .custom-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-track {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 7px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: #282a2c;
+    border-radius: 7px;
+  }
+}
