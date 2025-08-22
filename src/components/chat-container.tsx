@@ -51,6 +51,12 @@ export const ChatContainer = ({
       </button>
 
       <div className="border border-gray-700 w-[85%] flex-1 flex flex-col gap-3 p-4 overflow-hidden rounded-xl mt-5 overflow-y-scroll custom-scroll shadow-lg backdrop-blur-md">
+        {messages.length === 0 && (
+          <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
+            <span className="text-2xl mb-2">Nenhuma mensagem ainda</span>
+            <span className="text-sm">Faça uma pergunta para começar</span>
+          </div>
+        )}
         {messages.map((value, index) => (
           <div
             key={index}
